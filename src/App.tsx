@@ -1,8 +1,11 @@
-import { ComponentExample } from "@/components/component-example";
+import { ThemeToggle } from "@/components/layout/ThemeToggle";
 
 export function App() {
-  return <ComponentExample />;
+  return (
+    <>
+      <ThemeToggle />
+    </>
+  );
 }
 
 export default App;
-
