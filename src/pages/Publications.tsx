@@ -1,3 +1,5 @@
+import PublicationsList from "@/domains/publication/components/PublicationsList";
+
 export default function Publications() {
-  return <>Publicaciones</>;
+  return <PublicationsList />;
 }
