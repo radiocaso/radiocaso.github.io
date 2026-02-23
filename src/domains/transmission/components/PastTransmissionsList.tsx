@@ -1,4 +1,5 @@
 import { usePastTransmissions } from "@/domains/transmission/hooks/usePastTransmissions";
+import formatDate from "@/utils/formatDate";
 
 export default function PastTransmissionsList() {
   const { data, isLoading } = usePastTransmissions();
@@ -9,7 +10,7 @@ export default function PastTransmissionsList() {
     <ul>
       {data?.map((t) => (
         <li key={t._id} className="flex gap-2">
-          <div>{t.date}</div>
+          {t?.date && <div>{formatDate({ date: t.date, short: true })}</div>}
           <div>{t.title}</div>
         </li>
       ))}
