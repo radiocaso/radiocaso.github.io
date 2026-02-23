@@ -5,18 +5,24 @@ import Archive from "@/pages/Archive";
 import Publications from "@/pages/Publications";
 import Info from "@/pages/Info";
 import Header from "@/components/layout/Header";
+import AudioPlayer from "./features/player/AudioPlayer";
 
 export function App() {
   return (
     <>
       <Header />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/agenda" element={<Schedule />} />
-        <Route path="/archivo" element={<Archive />} />
-        <Route path="/publicaciones" element={<Publications />} />
-        <Route path="/info" element={<Info />} />
-      </Routes>
+      <section className="pb-32">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/agenda" element={<Schedule />} />
+          <Route path="/archivo" element={<Archive />} />
+          <Route path="/publicaciones" element={<Publications />} />
+          <Route path="/info" element={<Info />} />
+        </Routes>
+      </section>
+      <div className="bg-background fixed bottom-0 left-0 w-full">
+        <AudioPlayer />
+      </div>
     </>
   );
 }
