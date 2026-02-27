@@ -10,7 +10,7 @@ export default function NavMenu() {
           key={section}
           to={`/${section}`}
           className={({ isActive }) =>
-            `${isActive ? "bg-white text-black" : "border-white/20"} flex items-center justify-center rounded-full border text-xs uppercase transition-colors sm:size-28`
+            `${isActive ? "bg-foreground text-background" : ""} flex items-center justify-center rounded-full border text-xs uppercase transition-colors sm:size-28`
           }
         >
           {section}
