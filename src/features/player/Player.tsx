@@ -7,18 +7,18 @@ import {
   SpeakerSimpleHighIcon,
   SpeakerSimpleLowIcon,
 } from "@phosphor-icons/react";
+import { Separator } from "@/components/ui/separator";
+import { useNowPlaying } from "./useNowPlaying";
 
-export default function AudioPlayer() {
+export default function Player() {
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [data, setData] = useState<{
-    artist: string;
-    title: string;
-  } | null>(null);
   const [volume, setVolume] = useState(1);
   const [volumeOpen, setVolumeOpen] = useState(false);
 
-  const { data: initialData } = useSiteSettings();
+  const { data: siteSettings, isLoading: siteSettingsLoading } =
+    useSiteSettings();
+  const { data, isLoading } = useNowPlaying();
 
   const isHoverSupported =
     typeof window !== "undefined" &&
@@ -34,7 +34,7 @@ export default function AudioPlayer() {
     setVolume(newVolume);
   };
 
-  const currentAudio = { url: initialData?.streamUrl };
+  const currentAudio = { url: siteSettings?.streamUrl };
 
   useEffect(() => {
     if (audioRef.current) {
@@ -46,28 +46,12 @@ export default function AudioPlayer() {
     }
   }, [isPlaying]);
 
-  // TODO: resolver esto
-  const fetchData = () => {
-    fetch("https://www.radiojar.com/api/stations/34efk49zvncwv/now_playing/")
-      .then((response) => response.json())
-      .then((data) => {
-        setData(data);
-      })
-      .catch((err) => {
-        console.error("Error fetching data: ", err);
-      });
-  };
-
-  // Fetch the data on mount and then every 15 seconds
-  useEffect(() => {
-    fetchData();
-    const interval = setInterval(fetchData, 15000);
-    return () => clearInterval(interval);
-  }, []);
+  if (isLoading || siteSettingsLoading) return null;
 
   return (
     <>
-      <div className="border-accent/40 flex h-full items-center justify-start gap-4 border-t p-4">
+      <Separator />
+      <div className="flex h-full items-center justify-start gap-4 p-4">
         <Button onClick={handlePlay} className="w-16">
           {isPlaying ? "pausa" : "play"}
         </Button>
@@ -77,7 +61,7 @@ export default function AudioPlayer() {
             {data.artist} - <span className="italic">{data.title}</span>
           </div>
         ) : (
-          <div>sonando ahora x RADIO CASo</div>
+          <div>{siteSettings?.fallbackMessage}</div>
         )}
 
         <div className="size-2 animate-pulse rounded-full bg-red-500" />

@@ -9,6 +9,8 @@ const siteSettingsQuery = defineQuery(`*[_type == "infoGeneral"][0] {
     "socials": redesSociales,
     logo,
     "streamUrl": configuracionDeTransmision,
+    nowPlaying,
+    "fallbackMessage": mensajeGenericoDeTransmision,
     "highlighted": destacados[]->{
       _id,
       _type,

@@ -5,5 +5,6 @@ export function useSiteSettings() {
   return useQuery({
     queryKey: ["siteSettings"],
     queryFn: fetchSiteSettings,
+    staleTime: Infinity,
   });
 }

@@ -5,7 +5,7 @@ import Archive from "@/pages/Archive";
 import Publications from "@/pages/Publications";
 import Info from "@/pages/Info";
 import Header from "@/components/layout/Header";
-import AudioPlayer from "./features/player/AudioPlayer";
+import Player from "./features/player/Player";
 
 export function App() {
   return (
@@ -21,7 +21,7 @@ export function App() {
         </Routes>
       </section>
       <div className="bg-background fixed bottom-0 left-0 w-full">
-        <AudioPlayer />
+        <Player />
       </div>
     </>
   );
