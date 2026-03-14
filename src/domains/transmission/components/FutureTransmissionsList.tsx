@@ -1,4 +1,5 @@
 import { useFutureTransmissions } from "../hooks/useFutureTransmissions";
+import { Badge } from "@/components/ui/badge";
 import formatDate from "@/utils/formatDate";
 
 export default function FutureTransmissionsList() {
@@ -13,9 +14,9 @@ export default function FutureTransmissionsList() {
           {t?.date && <div>{formatDate({ date: t.date })}</div>}
           <div>{t.title}</div>
           {t.transmissionType?.map((tt) => (
-            <div className="text-xs opacity-60" key={tt._id}>
+            <Badge variant="secondary" key={tt._id}>
               {tt.label}
-            </div>
+            </Badge>
           ))}
         </li>
       ))}

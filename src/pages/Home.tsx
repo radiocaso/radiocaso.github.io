@@ -1,5 +1,5 @@
-import FutureTransmissionsList from "@/domains/transmission/components/FutureTransmissionsList";
+import NextTransmissionsGrid from "@/domains/transmission/components/NextTransmissionsGrid";
 
 export default function Home() {
-  return <FutureTransmissionsList />;
+  return <NextTransmissionsGrid />;
 }

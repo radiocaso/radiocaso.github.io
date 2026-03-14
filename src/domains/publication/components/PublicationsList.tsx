@@ -8,7 +8,9 @@ export default function PublicationsList() {
   return (
     <ul>
       {data?.map((p) => (
-        <li key={p._id}>{p.title}</li>
+        <li key={p._id}>
+          <h1>{p.title}</h1>
+        </li>
       ))}
     </ul>
   );

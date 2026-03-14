@@ -9,12 +9,13 @@ import {
 } from "@phosphor-icons/react";
 import { Separator } from "@/components/ui/separator";
 import { useNowPlaying } from "./useNowPlaying";
+import usePlayer from "./usePlayer";
 
 export default function Player() {
   const audioRef = useRef<HTMLAudioElement>(null);
-  const [isPlaying, setIsPlaying] = useState(false);
   const [volume, setVolume] = useState(1);
   const [volumeOpen, setVolumeOpen] = useState(false);
+  const { currentAudio, isPlaying, setIsPlaying } = usePlayer();
 
   const { data: siteSettings, isLoading: siteSettingsLoading } =
     useSiteSettings();
@@ -34,8 +35,6 @@ export default function Player() {
     setVolume(newVolume);
   };
 
-  const currentAudio = { url: siteSettings?.streamUrl };
-
   useEffect(() => {
     if (audioRef.current) {
       if (isPlaying) {
@@ -47,6 +46,19 @@ export default function Player() {
   }, [isPlaying]);
 
   if (isLoading || siteSettingsLoading) return null;
+
+  const streamAudio = siteSettings?.streamUrl
+    ? {
+        url: siteSettings?.streamUrl,
+        title: data?.title,
+        artist: data?.artist,
+      }
+    : null;
+
+  const audioToPlay = currentAudio ?? streamAudio;
+
+  console.log(audioToPlay);
+  console.log(data);
 
   return (
     <>
@@ -103,9 +115,19 @@ export default function Player() {
         </div>
       </div>
 
-      {currentAudio?.url && (
-        <audio src={currentAudio.url} ref={audioRef}></audio>
+      {audioToPlay?.url && (
+        <audio src={fixArchiveUrl(audioToPlay.url)} ref={audioRef}></audio>
       )}
     </>
   );
+}
+
+function fixArchiveUrl(url: string) {
+  const fixed = url.replace(
+    /^https:\/\/archive\.org\/details\//,
+    "https://archive.org/download/",
+  );
+
+  console.log(fixed);
+  return fixed;
 }

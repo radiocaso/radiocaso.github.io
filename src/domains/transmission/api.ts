@@ -1,8 +1,10 @@
 import { client } from "@/lib/sanity/client";
 import { defineQuery } from "groq";
+import { mapTransmission } from "./mappers";
 import type {
   FutureTransmissionsQueryResult,
   PastTransmissionsQueryResult,
+  TransmissionByIdQueryResult,
 } from "@/lib/sanity/types";
 
 const futureTransmissionsQuery =
@@ -34,7 +36,7 @@ export async function fetchFutureTransmissions() {
 }
 
 const pastTransmissionsQuery =
-  // defineQuery(`*[_type == "transmision"] | order(fecha desc) {
+  //defineQuery(`*[_type == "transmision"] | order(fecha desc) {
   defineQuery(`*[_type == "transmision" && fecha < now()] | order(fecha desc) {
     _id,
     "title": titulo,
@@ -50,6 +52,8 @@ const pastTransmissionsQuery =
       _id,
       "title": titulo},
     "shortDescription": descripcionCorta,
+    "url": audio{url},
+    archiveId,
   }`);
 
 export async function fetchPastTransmissions() {
@@ -57,4 +61,30 @@ export async function fetchPastTransmissions() {
     pastTransmissionsQuery,
   );
   return data;
+}
+
+const transmissionByIdQuery =
+  defineQuery(`*[_type == "transmision" && _id == $id][0] {
+  _id,
+  titulo,
+  audio{url},
+  slug,
+  fecha,
+  tipoDeTransmision,
+  descripcionCorta,
+  audio{url},
+  tags[]->{_id, tag},
+  tipoDeTransmision[]->{_id, tipoDeTransmision},
+}`);
+
+export async function fetchTransmissionById(id: string) {
+  const raw = await client.fetch<TransmissionByIdQueryResult>(
+    transmissionByIdQuery,
+    { id },
+  );
+  if (!raw) {
+    throw new Error("Transmission not found");
+  }
+
+  return mapTransmission(raw);
 }

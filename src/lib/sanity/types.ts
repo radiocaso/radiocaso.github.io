@@ -85,6 +85,7 @@ export type InfoGeneral = {
   configuracionDeTransmision?: string;
   nowPlaying?: string;
   mensajeGenericoDeTransmision?: string;
+  schedule?: string;
 };
 
 export type BlockContent = Array<{
@@ -256,6 +257,7 @@ export type Transmision = {
   audio?: {
     url?: string;
   };
+  archiveId?: string;
   imagen?: {
     url?: string;
     archivo?: {
@@ -551,7 +553,7 @@ export type PublicationsQueryResult = Array<{
 
 // Source: ../radiocaso/src/domains/site/api.ts
 // Variable: siteSettingsQuery
-// Query: *[_type == "infoGeneral"][0] {    "title": titulo,    "info": descripcion,    "contact": contacto,    "socials": redesSociales,    logo,    "streamUrl": configuracionDeTransmision,    nowPlaying,    "fallbackMessage": mensajeGenericoDeTransmision,    "highlighted": destacados[]->{      _id,      _type,      "title": titulo,      slug,    },  }
+// Query: *[_type == "infoGeneral"][0] {    "title": titulo,    "info": descripcion,    "contact": contacto,    "socials": redesSociales,    logo,    "streamUrl": configuracionDeTransmision,    nowPlaying,    "fallbackMessage": mensajeGenericoDeTransmision,    schedule,    "highlighted": destacados[]->{      _id,      _type,      "title": titulo,      slug,    },  }
 export type SiteSettingsQueryResult = {
   title: string | null;
   info: BlockContent | null;
@@ -572,6 +574,7 @@ export type SiteSettingsQueryResult = {
   streamUrl: string | null;
   nowPlaying: string | null;
   fallbackMessage: string | null;
+  schedule: string | null;
   highlighted: Array<{
     _id: string;
     _type: "contexto";
@@ -615,7 +618,7 @@ export type FutureTransmissionsQueryResult = Array<{
 
 // Source: ../radiocaso/src/domains/transmission/api.ts
 // Variable: pastTransmissionsQuery
-// Query: *[_type == "transmision" && fecha < now()] | order(fecha desc) {    _id,    "title": titulo,    "date": fecha,    "transmissionType": tipoDeTransmision[]->{      _id,      "label": tipoDeTransmision    },    "program": programa->{      _id,      "title": titulo},    "context": contexto->{      _id,      "title": titulo},    "shortDescription": descripcionCorta,  }
+// Query: *[_type == "transmision" && fecha < now()] | order(fecha desc) {    _id,    "title": titulo,    "date": fecha,    "transmissionType": tipoDeTransmision[]->{      _id,      "label": tipoDeTransmision    },    "program": programa->{      _id,      "title": titulo},    "context": contexto->{      _id,      "title": titulo},    "shortDescription": descripcionCorta,    "url": audio{url},    archiveId,  }
 export type PastTransmissionsQueryResult = Array<{
   _id: string;
   title: string | null;
@@ -633,6 +636,10 @@ export type PastTransmissionsQueryResult = Array<{
     title: string | null;
   } | null;
   shortDescription: string | null;
+  url: {
+    url: string | null;
+  } | null;
+  archiveId: string | null;
 }>;
 
 // Source: ../radiocaso/src/domains/transmission/api.ts
@@ -662,9 +669,9 @@ import "@sanity/client";
 declare module "@sanity/client" {
   interface SanityQueries {
     "*[_type == \"publicacion\"] | order(fecha desc) { \n      _id,\n      \"title\": titulo,\n      slug,\n      \"date\": fecha,\n      \"publicationType\": tipoDePublicacion,\n      \"description\": descripcion,\n      \"resources\": recursos[]->{\n        _id,\n        \"title\": titulo,\n        url,\n        \"file\": archivo{\n          asset->{\n            url\n          }\n        },\n      },\n      \"credits\": creditos\n    }": PublicationsQueryResult;
-    "*[_type == \"infoGeneral\"][0] {\n    \"title\": titulo,\n    \"info\": descripcion,\n    \"contact\": contacto,\n    \"socials\": redesSociales,\n    logo,\n    \"streamUrl\": configuracionDeTransmision,\n    nowPlaying,\n    \"fallbackMessage\": mensajeGenericoDeTransmision,\n    \"highlighted\": destacados[]->{\n      _id,\n      _type,\n      \"title\": titulo,\n      slug,\n    },\n  }": SiteSettingsQueryResult;
+    "*[_type == \"infoGeneral\"][0] {\n    \"title\": titulo,\n    \"info\": descripcion,\n    \"contact\": contacto,\n    \"socials\": redesSociales,\n    logo,\n    \"streamUrl\": configuracionDeTransmision,\n    nowPlaying,\n    \"fallbackMessage\": mensajeGenericoDeTransmision,\n    schedule,\n    \"highlighted\": destacados[]->{\n      _id,\n      _type,\n      \"title\": titulo,\n      slug,\n    },\n  }": SiteSettingsQueryResult;
     "*[_type == \"transmision\"] | order(fecha asc)[0..3] { \n    _id,\n    \"title\": titulo,\n    \"date\": fecha,\n    slug,\n    \"transmissionType\": tipoDeTransmision[]->{\n      _id,\n      \"label\": tipoDeTransmision\n    },\n    \"program\": programa->{\n      _id,\n      \"title\": titulo},\n    \"context\": contexto->{\n      _id,\n      \"title\": titulo},\n    \"shortDescription\": descripcionCorta,\n  }": FutureTransmissionsQueryResult;
-    "*[_type == \"transmision\" && fecha < now()] | order(fecha desc) {\n    _id,\n    \"title\": titulo,\n    \"date\": fecha,\n    \"transmissionType\": tipoDeTransmision[]->{\n      _id,\n      \"label\": tipoDeTransmision\n    },\n    \"program\": programa->{\n      _id,\n      \"title\": titulo},\n    \"context\": contexto->{\n      _id,\n      \"title\": titulo},\n    \"shortDescription\": descripcionCorta,\n  }": PastTransmissionsQueryResult;
+    "*[_type == \"transmision\" && fecha < now()] | order(fecha desc) {\n    _id,\n    \"title\": titulo,\n    \"date\": fecha,\n    \"transmissionType\": tipoDeTransmision[]->{\n      _id,\n      \"label\": tipoDeTransmision\n    },\n    \"program\": programa->{\n      _id,\n      \"title\": titulo},\n    \"context\": contexto->{\n      _id,\n      \"title\": titulo},\n    \"shortDescription\": descripcionCorta,\n    \"url\": audio{url},\n    archiveId,\n  }": PastTransmissionsQueryResult;
     "*[_type == \"transmision\" && _id == $id][0] {\n  _id,\n  titulo,\n  audio{url},\n  slug,\n  fecha,\n  tipoDeTransmision,\n  descripcionCorta,\n  audio{url},\n  tags[]->{_id, tag},\n  tipoDeTransmision[]->{_id, tipoDeTransmision},\n}": TransmissionByIdQueryResult;
   }
 }

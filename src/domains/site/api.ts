@@ -11,6 +11,7 @@ const siteSettingsQuery = defineQuery(`*[_type == "infoGeneral"][0] {
     "streamUrl": configuracionDeTransmision,
     nowPlaying,
     "fallbackMessage": mensajeGenericoDeTransmision,
+    schedule,
     "highlighted": destacados[]->{
       _id,
       _type,
