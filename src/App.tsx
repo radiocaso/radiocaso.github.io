@@ -6,6 +6,7 @@ import Publications from "@/pages/Publications";
 import Info from "@/pages/Info";
 import Header from "@/components/layout/Header";
 import Player from "./features/player/Player";
+import ArchivePermalinkTool from "@/tools/ArchivePermalinkTool";
 
 export function App() {
   return (
@@ -18,6 +19,7 @@ export function App() {
           <Route path="/archivo" element={<Archive />} />
           <Route path="/publicaciones" element={<Publications />} />
           <Route path="/info" element={<Info />} />
+          <Route path="/permanentes" element={<ArchivePermalinkTool />} />
         </Routes>
       </section>
       <div className="bg-background fixed bottom-0 left-0 w-full">
